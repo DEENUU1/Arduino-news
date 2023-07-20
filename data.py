@@ -2,6 +2,7 @@ from dataclasses import dataclass
 import requests
 import logging
 from unidecode import unidecode
+from typing import List 
 
 logging.basicConfig(level=logging.INFO, filename="data.log", format="%(asctime)s %(levelname)s %(message)s")
 
@@ -13,10 +14,12 @@ class Article:
 
 
 class News:
-    def __init__(self, url, api_key):
+    """ Download and process data from newsapi """
+    def __init__(self, url: str, api_key: str):
         self.base_url = f"{url}&apikey={api_key}"
 
     def get_news(self):
+        """ Download data from news api """
         try:
             result = requests.get(self.base_url)
             result.raise_for_status()
@@ -28,7 +31,8 @@ class News:
             logging.error(f"Request Exception occurred: {e}")
             raise Exception("Something went wrong with the request")
 
-    def return_news(self):
+    def return_news(self) -> List[Article]:
+        """ Return data from newsapi """
         try:
             all_articles = []
             for article in self.get_news():

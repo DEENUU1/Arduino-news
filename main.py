@@ -7,7 +7,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-def send_serial(data, com):
+def send_serial(data: str, com: str):
+    """ Send serial data to arduino """
     ser = serial.Serial(com, 9600, timeout=1)
     try:
         while True:

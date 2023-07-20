@@ -10,25 +10,28 @@ void setup() {
 }
 
 void loop() {
+  String welcomeMessage = "Welcome to news dashboard!";
+  int welcomeMessageLenght = welcomeMessage.length();
+  for (int i = 0; i <= welcomeMessageLenght - lcdWidth; i++) {
+    lcd.setCursor(padding, 0);
+    lcd.print(welcomeMessage.substring(i, i + lcdWidth));
+    delay(500); 
+  }
+
+  delay(3000);
+
   if (Serial.available() > 0) {
     String dataFromComputer = Serial.readString();
 
-    if (dataFromComputer.startsWith("NOTE")) {
-      int noteFrequency = dataFromComputer.substring(4, dataFromComputer.indexOf(',')).toInt();
-      int noteDuration = dataFromComputer.substring(dataFromComputer.indexOf(',') + 1).toInt();
-
-      tone(2, noteFrequency, noteDuration);
+    int textLength = dataFromComputer.length();
+    if (textLength <= lcdWidth) {
+      lcd.setCursor(padding, 0);
+      lcd.print(dataFromComputer);
     } else {
-      int textLength = dataFromComputer.length();
-      if (textLength <= lcdWidth) {
+      for (int i = 0; i <= textLength - lcdWidth; i++) {
         lcd.setCursor(padding, 0);
-        lcd.print(dataFromComputer);
-      } else {
-        for (int i = 0; i <= textLength - lcdWidth; i++) {
-          lcd.setCursor(padding, 0);
-          lcd.print(dataFromComputer.substring(i, i + lcdWidth));
-          delay(500); 
-        }
+        lcd.print(dataFromComputer.substring(i, i + lcdWidth));
+        delay(500); 
       }
     }
   }
