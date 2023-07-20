@@ -13,15 +13,22 @@ void loop() {
   if (Serial.available() > 0) {
     String dataFromComputer = Serial.readString();
 
-    int textLength = dataFromComputer.length();
-    if (textLength <= lcdWidth) {
-      lcd.setCursor(padding, 0);
-      lcd.print(dataFromComputer);
+    if (dataFromComputer.startsWith("NOTE")) {
+      int noteFrequency = dataFromComputer.substring(4, dataFromComputer.indexOf(',')).toInt();
+      int noteDuration = dataFromComputer.substring(dataFromComputer.indexOf(',') + 1).toInt();
+
+      tone(2, noteFrequency, noteDuration);
     } else {
-      for (int i = 0; i <= textLength - lcdWidth; i++) {
+      int textLength = dataFromComputer.length();
+      if (textLength <= lcdWidth) {
         lcd.setCursor(padding, 0);
-        lcd.print(dataFromComputer.substring(i, i + lcdWidth));
-        delay(500); 
+        lcd.print(dataFromComputer);
+      } else {
+        for (int i = 0; i <= textLength - lcdWidth; i++) {
+          lcd.setCursor(padding, 0);
+          lcd.print(dataFromComputer.substring(i, i + lcdWidth));
+          delay(500); 
+        }
       }
     }
   }
