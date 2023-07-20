@@ -12,11 +12,9 @@ void setup() {
 void loop() {
   if (Serial.available() > 0) {
     String dataFromComputer = Serial.readString();
-    lcd.clear();
 
     int textLength = dataFromComputer.length();
     if (textLength <= lcdWidth) {
-      
       lcd.setCursor(padding, 0);
       lcd.print(dataFromComputer);
     } else {
@@ -26,8 +24,5 @@ void loop() {
         delay(500); 
       }
     }
-    
-    delay(3000);
-    lcd.clear();
   }
 }

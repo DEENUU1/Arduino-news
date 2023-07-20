@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 import requests
 import logging
-
+from unidecode import unidecode
 
 logging.basicConfig(level=logging.INFO, filename="data.log", format="%(asctime)s %(levelname)s %(message)s")
 
@@ -22,19 +22,34 @@ class News:
             result.raise_for_status()
             json_result = result.json()
             articles = json_result["articles"]
+            return articles
 
+        except requests.exceptions.RequestException as e:
+            logging.error(f"Request Exception occurred: {e}")
+            raise Exception("Something went wrong with the request")
+
+    def return_news(self):
+        try:
             all_articles = []
-            for article in articles:
+            for article in self.get_news():
                 article_title = article["title"]
                 article_description = article["description"]
 
-                all_articles.append(Article(article_title, article_description))
+                unicode_title = self.parse_text(article_title)
+                unicode_description = self.parse_text(article_description)
+
+                all_articles.append(Article(unicode_title, unicode_description))
 
             return all_articles
-        except requests.exceptions.RequestException as e:
-            logging.error(f"Request Exception occured: {e}")
-            raise Exception("Something went wrong with the request")
 
         except Exception as e:
-            logging.error(f"Unhandled Exception occured: {e}")
+            logging.error(f"Unhandled Exception occurred: {e}")
             raise Exception("An error occurred while processing the data")
+
+    def parse_text(self, text: str) -> str | None:
+        """ Removes Polish characters and leaves only those in the English alphabet """
+        if text:
+            return unidecode(text)
+        else:
+            return None
+

@@ -19,7 +19,8 @@ def send_serial(data, com):
 
 def main():
     news_data = News("https://newsapi.org/v2/top-headlines?country=PL", os.getenv("NEWSAPI_KEY"))
-    for data in news_data.get_news():
+
+    for data in news_data.return_news():
         if not data.description:
             str_data = data.title
             send_serial(str_data, "COM5")
