@@ -1,11 +1,6 @@
 from dataclasses import dataclass
 import requests
-import os
-from dotenv import load_dotenv
 import logging
-
-
-load_dotenv()
 
 
 logging.basicConfig(level=logging.INFO, filename="data.log", format="%(asctime)s %(levelname)s %(message)s")
@@ -43,7 +38,3 @@ class News:
         except Exception as e:
             logging.error(f"Unhandled Exception occured: {e}")
             raise Exception("An error occurred while processing the data")
-
-
-news = News("https://newsapi.org/v2/top-headlines?country=PL", os.getenv("NEWSAPI_KEY"))
-print(news.get_news())
