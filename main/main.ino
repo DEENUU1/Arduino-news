@@ -9,30 +9,29 @@ void setup() {
   Serial.begin(9600);
 }
 
+void scrollText(int textLength, String text) {
+    for (int i = 0; i <= textLength - lcdWidth; i++) {
+    lcd.setCursor(padding, 0);
+    lcd.print(text.substring(i, i + lcdWidth));
+    delay(500); 
+  }
+}
+
 void loop() {
   String welcomeMessage = "Welcome to news dashboard!";
   int welcomeMessageLenght = welcomeMessage.length();
-  for (int i = 0; i <= welcomeMessageLenght - lcdWidth; i++) {
-    lcd.setCursor(padding, 0);
-    lcd.print(welcomeMessage.substring(i, i + lcdWidth));
-    delay(500); 
-  }
 
+  scrollText(welcomeMessageLenght, welcomeMessage);
   delay(3000);
 
   if (Serial.available() > 0) {
     String dataFromComputer = Serial.readString();
-
     int textLength = dataFromComputer.length();
     if (textLength <= lcdWidth) {
       lcd.setCursor(padding, 0);
       lcd.print(dataFromComputer);
     } else {
-      for (int i = 0; i <= textLength - lcdWidth; i++) {
-        lcd.setCursor(padding, 0);
-        lcd.print(dataFromComputer.substring(i, i + lcdWidth));
-        delay(500); 
-      }
+      scrollText(textLength, dataFromComputer);
     }
   }
 }
