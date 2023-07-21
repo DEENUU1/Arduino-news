@@ -25,7 +25,12 @@ void scrollText(int textLength, String text) {
 }
 
 void loop() {
-
+  String welcomeMessage = "Welcome!";
+  lcd.setCursor(padding, 0);
+  lcd.print(welcomeMessage);  
+  delay(2000);
+  lcd.clear(); 
+  
   lcd.setCursor(0, 1);
   sensors.requestTemperatures();
   lcd.print(sensors.getTempCByIndex(0));
@@ -33,11 +38,6 @@ void loop() {
   lcd.print(("st. C"));
   delay(1000);
 
-  String welcomeMessage = "Welcome to news dashboard!";
-  int welcomeMessageLenght = welcomeMessage.length();
-
-  scrollText(welcomeMessageLenght, welcomeMessage);
-  delay(3000);
 
   if (Serial.available() > 0) {
     String dataFromComputer = Serial.readString();
